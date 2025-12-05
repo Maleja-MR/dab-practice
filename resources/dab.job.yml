@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    dab_job:
+      name: "job_${bundle.target}"
+
+      trigger:
+        file_arrival:
+          url: "${var.volumen_path}"
+
+      email_notifications:
+        on_failure: #si falla manda correo al que esta indicado
+          - maria.mejia@lovelytics.com
+                  
+      tasks: # Las tareas que va a ejecutar el job
+        - task_key: task_1
+          notebook_task:
+            notebook_path: ../src/create_table.py # Ejecuta lo que se encuentra en el notebook
+        - task_key: run_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.etl_pipeline.id}
+          depends_on:
+            - task_key: task_1
+              
+      parameters: 
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+

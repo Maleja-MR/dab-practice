@@ -1,0 +1,53 @@
+bundle:
+  name: dab-practice
+
+include:
+  - resources/*.yml
+  
+# Dentro de este archivo se definen las variables globales que se leen en el access bundle
+variables:
+  catalog: 
+    default: data-growth
+  schema:
+    default: ${resources.schemas.dab-schema.name} #busca el archivo sche y de ahi trae el nombre
+  volumen_path:
+    default: /Volumes/${var.catalog}/${var.schema}/${resources.volumes.dab-volume.name}/
+
+presets: #Configuraciones predeterminadas, en este caso al estar antes de los targets aplica para todos
+  tags:
+    project: ${bundle.name}
+    env: ${bundle.target}
+  trigger_pause_status: PAUSED
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-581756823031993.13.azuredatabricks.net/
+
+  qa:
+    mode: production
+    workspace:
+      host: https://adb-581756823031993.13.azuredatabricks.net/
+      file_path: /Workspace/dab-practice/${workspace.current_user.short_name}/${bundle.target}
+      root_path: /Workspace/dab-practice/${workspace.current_user.short_name}/${bundle.target}/.bundle
+    presets:
+      name_prefix: "[qa ${workspace.current_user.short_name}]"
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-581756823031993.13.azuredatabricks.net/
+      file_path: /Workspace/dab-practice/${workspace.current_user.short_name}/${bundle.target}
+      root_path: /Workspace/dab-practice/${workspace.current_user.short_name}/${bundle.target}/.bundle
+    presets: # como quiero una nueva configuaracion pongo su respectivo preset
+      name_prefix: "[prod ${workspace.current_user.short_name}]"
+      trigger_pause_status: UNPAUSED
+    resources: 
+      jobs:
+        dab_job:
+          email_notifications:
+            on_success:
+              - valeria.medina@lovelytics.com
+              - maria.mejia@lovelytics.com

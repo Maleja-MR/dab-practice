@@ -1,0 +1,6 @@
+resources:
+  schemas:
+    dab-schema:
+      name: ${bundle.target}_schema ## nombra la variable segun el entorno
+      catalog_name: ${var.catalog} # toma la variable global que está en databricks.yml
+
