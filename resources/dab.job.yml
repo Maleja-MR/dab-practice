@@ -1,7 +1,7 @@
 resources:
   jobs:
     dab_job:
-      name: "job_${bundle.target}"
+      name: "job"
 
       trigger:
         file_arrival:
