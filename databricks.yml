@@ -13,7 +13,7 @@ variables:
   volumen_path:
     default: /Volumes/${var.catalog}/${var.schema}/${resources.volumes.dab-volume.name}/
 
-presets: #Configuraciones predeterminadas, en este caso al estar antes de los targets aplica para todos
+presets: #Configuraciones predeterminadas, en este caso al estar antes de los targets aplica para todos 
   tags:
     project: ${bundle.name}
     env: ${bundle.target}
